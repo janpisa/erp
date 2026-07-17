@@ -41,7 +41,7 @@ library(writexl)
 ## EARNINGS ----
 # assumption = cash flows occur at year-end, annual compounding employed
 # cubic spline interpolation of S&P 500 earnings forecast from Yardeni
-# earnings beyond the explicit forecast period extrapolated using a method employed by Damodaran
+# earnings beyond the explicit forecast period extrapolated using a method proposed by Damodaran
 
 # sample import from Excel (s&p_earnings.xlsx), stored in your working directory
 earnings = read.xlsx("s&p_earnings.xlsx")
@@ -88,6 +88,7 @@ myfutures = merge(new_futures, cubic_futures, by="day", all = TRUE)
 # model settlement date (T+2) = 16 July 2026
 
 # S&P 500 earnings (interpolated)
+# adjust the dates accordingly
 earnings27 = mydata$cubic_data[mydata$day == as.Date("2027-07-16")]
 earnings28 = mydata$cubic_data[mydata$day == as.Date("2028-07-16")]
 earnings29 = mydata$cubic_data[mydata$day == as.Date("2029-07-16")]
@@ -110,6 +111,7 @@ earnings45 = mydata$cubic_data[mydata$day == as.Date("2045-07-16")]
 earnings46 = mydata$cubic_data[mydata$day == as.Date("2046-07-16")]
 
 # S&P 500 annual dividend future contract quotes (interpolated)
+# adjust the dates accordingly
 futures27 = myfutures$cubic_futures[myfutures$day == as.Date("2027-07-16")]
 futures28 = myfutures$cubic_futures[myfutures$day == as.Date("2028-07-16")]
 futures29 = myfutures$cubic_futures[myfutures$day == as.Date("2029-07-16")]
@@ -167,7 +169,7 @@ ratio
 # historical net buyback payout 
 buy_payout = ratio$buy_payout[1:12]
 
-# arithmetical average of net buybacks/earnings since 2014
+# arithmetic average of net buybacks/earnings since 2014
 # USE IF: the most recent payout ratio appears implausible/as an outlier
 mean_buy_payout = mean(ratio$buy_payout, na.rm = TRUE)
 mean_buy_payout
@@ -177,7 +179,7 @@ mean_buy_payout
 # and stable total net payout ratio is desirable
 buy_payout_75 = quantile(
   buy_payout,
-  probs = 1,
+  probs = 0.75,
   na.rm = TRUE
 )
 buy_payout_75
